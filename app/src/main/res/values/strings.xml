@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">CrayonAttendanceList</string>
     <string name="action_settings">Settings</string>
+    <string name="add_attendance_list">Dodaj listę obecności</string>
+    <string name="list_title">Tytuł zajęć</string>
+    <string name="date">Data</string>
+    <string name="cancel">Wróć</string>
+    <string name="add">Dodaj</string>
 </resources>

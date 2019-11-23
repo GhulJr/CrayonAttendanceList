@@ -27,4 +27,9 @@ class DatabaseRepo private constructor(context: Context) {
         return database.attendanceListDao.getAllLists()
     }
 
+    fun insertAttendanceLists(vararg lists : AttendanceList) {
+        executor.execute {
+            database.attendanceListDao.insertLists(*lists)
+        }
+    }
 }

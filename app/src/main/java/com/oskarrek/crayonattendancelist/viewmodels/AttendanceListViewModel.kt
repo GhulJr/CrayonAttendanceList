@@ -14,4 +14,8 @@ class AttendanceListViewModel(application: Application) : AndroidViewModel(appli
     init {
         attendanceLists = repoDB.getAttendanceLists()
     }
+
+    fun addAttendanceList(list : AttendanceList) {
+        repoDB.insertAttendanceLists(list)
+    }
 }

@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "participants")
 data class Participant(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "first_name")    val firstName   : String,
     @ColumnInfo(name = "last_name")     val lastName    : String,
     @ColumnInfo(name = "string_id")     val stringId    : String) {

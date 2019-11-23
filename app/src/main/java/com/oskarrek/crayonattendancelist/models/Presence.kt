@@ -22,6 +22,6 @@ import androidx.room.PrimaryKey
 )
 
 data class Presence(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     val attendanceListId: Int,
     val participantId: Int)

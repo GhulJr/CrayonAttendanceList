@@ -17,7 +17,7 @@ import kotlin.collections.ArrayList
 class AttendanceListsAdapter() :
     RecyclerView.Adapter<AttendanceListsAdapter.AttendanceListViewHolder>() {
 
-    lateinit var list : List<AttendanceList>
+    lateinit var list : ArrayList<AttendanceList>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendanceListViewHolder
             = AttendanceListViewHolder(LayoutInflater

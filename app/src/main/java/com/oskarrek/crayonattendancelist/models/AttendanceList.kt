@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "attendance_lists")
 data class AttendanceList(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "date_in_millis") val dateInMillis: Long) {
 

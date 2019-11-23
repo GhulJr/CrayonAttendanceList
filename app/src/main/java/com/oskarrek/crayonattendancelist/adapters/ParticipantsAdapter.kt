@@ -18,7 +18,7 @@ class ParticipantsAdapter : RecyclerView.Adapter<ParticipantsAdapter.Participant
     }
 
 
-    class ParticipantViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    class ParticipantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     }
 }

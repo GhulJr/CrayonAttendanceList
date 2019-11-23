@@ -1,21 +1,27 @@
 package com.oskarrek.crayonattendancelist
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oskarrek.crayonattendancelist.adapters.AttendanceListsAdapter
+import com.oskarrek.crayonattendancelist.dialogs.AddEditListDialogFragment
+import com.oskarrek.crayonattendancelist.interfaces.IOnCreateListListener
 import com.oskarrek.crayonattendancelist.models.AttendanceList
 import com.oskarrek.crayonattendancelist.viewmodels.AttendanceListViewModel
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), IOnCreateListListener {
+
 
     private lateinit var listsAdapter : AttendanceListsAdapter
     private lateinit var viewModel: AttendanceListViewModel
@@ -27,8 +33,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            addAttendanceList()
         }
 
         setupViewModel()
@@ -42,13 +47,18 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item : MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    /**Interfaces.*/
+
+    override fun onCreate(list : AttendanceList) {
+       viewModel.addAttendanceList(list)
+    }
 
     /**Utils classes.*/
 
@@ -66,9 +76,15 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewModel() {
         viewModel = ViewModelProviders.of(this).get(AttendanceListViewModel::class.java)
         viewModel.attendanceLists.observe(this, Observer {list ->
-            listsAdapter.list = list
+            listsAdapter.list = ArrayList(list) // Might cause a problem.
             listsAdapter.notifyDataSetChanged()
         })
+    }
+
+    // TODO:(O) Create separate class from it/move this method to ViewModel.
+    private fun addAttendanceList() {
+        val dialogFragment = AddEditListDialogFragment()
+        dialogFragment.show(supportFragmentManager, "AddEditListDialogFragment")
     }
 
     private fun getDummyData() : ArrayList<AttendanceList>{
