@@ -1,13 +1,14 @@
 package com.oskarrek.crayonattendancelist
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.FragmentManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +17,7 @@ import com.oskarrek.crayonattendancelist.adapters.AttendanceListsAdapter
 import com.oskarrek.crayonattendancelist.dialogs.AddEditListDialogFragment
 import com.oskarrek.crayonattendancelist.interfaces.IOnCreateListListener
 import com.oskarrek.crayonattendancelist.models.AttendanceList
-import com.oskarrek.crayonattendancelist.viewmodels.AttendanceListViewModel
+import com.oskarrek.crayonattendancelist.viewmodels.MainActivityViewModel
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -25,21 +26,19 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
 
 
     private lateinit var listsAdapter : AttendanceListsAdapter
-    private lateinit var viewModel: AttendanceListViewModel
+    private lateinit var viewModel: MainActivityViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        fab.setOnClickListener { addAttendanceList() }
 
-        fab.setOnClickListener { view ->
-            addAttendanceList()
+        if(checkPermission()) {
+            setupViewModel()
+            setupRecyclerView()
         }
-
-        setupViewModel()
-        setupRecyclerView()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -75,11 +74,13 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProviders.of(this).get(AttendanceListViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
         viewModel.attendanceLists.observe(this, Observer {list ->
             listsAdapter.list = ArrayList(list) // Might cause a problem.
             listsAdapter.notifyDataSetChanged()
         })
+
+        viewModel.loadParticipantsFromExcel()
     }
 
     // TODO:(O) Create separate class from it/move this method to ViewModel.
@@ -97,6 +98,30 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
 
         return dummyList
     }
+
+    private fun checkPermission() : Boolean{
+
+
+        val permissionCheck = 1001
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                //TODO: do something here.
+            } else {
+                ActivityCompat.requestPermissions(
+                    this,
+                    Array(1) { Manifest.permission.READ_EXTERNAL_STORAGE },
+                    permissionCheck
+                )
+
+            }
+            return false
+        }
+
+        return true
+    }
+
 
     /**Interfaces.*/
 

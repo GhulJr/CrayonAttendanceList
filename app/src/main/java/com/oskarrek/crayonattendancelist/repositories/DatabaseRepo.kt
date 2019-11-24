@@ -37,4 +37,10 @@ class DatabaseRepo private constructor(context: Context) {
     fun getParticipants(): LiveData<List<Participant>> {
         return database.participantDao.getParticipants()
     }
+
+    fun insertParticipants(vararg array : Participant) {
+        executor.execute {
+            database.participantDao.insertParticipants(*array)
+        }
+    }
 }
