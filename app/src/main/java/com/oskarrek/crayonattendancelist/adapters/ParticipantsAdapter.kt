@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.oskarrek.crayonattendancelist.R
 import com.oskarrek.crayonattendancelist.models.AttendanceList
 import com.oskarrek.crayonattendancelist.models.Participant
+import kotlinx.android.synthetic.main.item_participant.view.*
 
 class ParticipantsAdapter : RecyclerView.Adapter<ParticipantsAdapter.ParticipantViewHolder>() {
 
@@ -22,16 +23,20 @@ class ParticipantsAdapter : RecyclerView.Adapter<ParticipantsAdapter.Participant
 
     override fun onBindViewHolder(holder: ParticipantViewHolder, position: Int) {
         val participant = list[position]
-
-        holder.name.text = participant.firstName
-        holder.surname.text = participant.lastName
+        holder.bind(participant)
         //TODO: do something with checkbox
     }
 
 
-    class ParticipantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ParticipantViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val name : TextView =  view.findViewById(R.id.participant_name)
         val surname : TextView =  view.findViewById(R.id.participant_surname)
         val checkBox : CheckBox = view.findViewById(R.id.participant_checked)
+
+        fun bind(participant: Participant) {
+            view.participant_name.text = participant.firstName
+            view.participant_surname.text = participant.lastName
+            //todo:provide on click.
+        }
     }
 }

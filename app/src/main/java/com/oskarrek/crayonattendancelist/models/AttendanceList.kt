@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Entity(tableName = "attendance_lists")
 data class AttendanceList(
@@ -15,4 +17,11 @@ data class AttendanceList(
     constructor(
         title   : String,
         dateInMillis    : Long) : this(0, title, dateInMillis)
+
+    @Ignore
+    fun getDateAsString() : String{
+        val date = Date(dateInMillis)
+        val simpleDateFormat = SimpleDateFormat.getDateInstance()
+        return simpleDateFormat.format(date)
+    }
 }

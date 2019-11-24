@@ -44,7 +44,9 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation "android.arch.lifecycle:viewmodel:1.1.1"
 
-    //LiveData
+    //POI Excel parser
+    implementation "org.apache.poi:poi:3.17"
+    implementation "org.apache.poi:poi-ooxml:3.17"
 
 
 }

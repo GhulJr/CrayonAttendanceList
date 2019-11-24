@@ -2,6 +2,7 @@ package com.oskarrek.crayonattendancelist.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +12,7 @@ import com.oskarrek.crayonattendancelist.adapters.ParticipantsAdapter
 import com.oskarrek.crayonattendancelist.models.Participant
 import com.oskarrek.crayonattendancelist.viewmodels.AttendanceListViewModel
 import com.oskarrek.crayonattendancelist.viewmodels.ParticipantsViewModel
+import kotlinx.android.synthetic.main.content_check_presence.*
 import kotlinx.android.synthetic.main.content_main.*
 
 class CheckPresenceActivity : AppCompatActivity() {
@@ -22,6 +24,9 @@ class CheckPresenceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_presence)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
         setupRecyclerView()
         setupViewModel()
     }
@@ -30,8 +35,7 @@ class CheckPresenceActivity : AppCompatActivity() {
         participantsAdapter = ParticipantsAdapter().apply {
             list = getDummyData()
         }
-
-        attendanceList_recyclerView.apply {
+        participant_recyclerView.apply {
             this.layoutManager = LinearLayoutManager(this@CheckPresenceActivity)
             adapter = participantsAdapter
         }
@@ -40,7 +44,7 @@ class CheckPresenceActivity : AppCompatActivity() {
     private fun setupViewModel() {
         viewModel = ViewModelProviders.of(this).get(ParticipantsViewModel::class.java)
         viewModel.participants.observe(this, Observer {list ->
-            participantsAdapter.list = ArrayList(list) // Might cause a problem.
+          //  participantsAdapter.list = ArrayList(list) // Might cause a problem.
             participantsAdapter.notifyDataSetChanged()
         })
     }

@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.oskarrek.crayonattendancelist.activities.CheckPresenceActivity
 import com.oskarrek.crayonattendancelist.adapters.AttendanceListsAdapter
 import com.oskarrek.crayonattendancelist.dialogs.AddEditListDialogFragment
 import com.oskarrek.crayonattendancelist.interfaces.IOnCreateListListener
@@ -54,10 +55,18 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
         }
     }
 
+    /** Listeners methods. */
+
+    private fun onAttendanceListClick(attendanceList: AttendanceList) {
+        val intent = Intent(this@MainActivity, CheckPresenceActivity::class.java)
+        startActivity(intent)
+        //TODO: Extend intent to start activity with list data.
+    }
+
     /**Utils classes.*/
 
     private fun setupRecyclerView() {
-        listsAdapter = AttendanceListsAdapter()
+        listsAdapter = AttendanceListsAdapter { attendanceList -> onAttendanceListClick(attendanceList) }
 
         attendanceList_recyclerView.apply {
             this.layoutManager = LinearLayoutManager(this@MainActivity)
