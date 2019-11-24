@@ -54,18 +54,10 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
         }
     }
 
-    /**Interfaces.*/
-
-    override fun onCreate(list : AttendanceList) {
-       viewModel.addAttendanceList(list)
-    }
-
     /**Utils classes.*/
 
     private fun setupRecyclerView() {
-        listsAdapter = AttendanceListsAdapter().apply {
-            list = getDummyData()
-        }
+        listsAdapter = AttendanceListsAdapter()
 
         attendanceList_recyclerView.apply {
             this.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -95,5 +87,11 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
         }
 
         return dummyList
+    }
+
+    /**Interfaces.*/
+
+    override fun onCreate(list : AttendanceList) {
+        viewModel.addAttendanceList(list)
     }
 }

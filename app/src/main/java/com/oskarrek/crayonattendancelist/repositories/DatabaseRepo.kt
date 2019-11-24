@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.oskarrek.crayonattendancelist.database.CrayonDatabase
 import com.oskarrek.crayonattendancelist.models.AttendanceList
+import com.oskarrek.crayonattendancelist.models.Participant
 import com.oskarrek.crayonattendancelist.utils.SingletonHolder
 import java.lang.Exception
 import java.util.concurrent.Executor
@@ -31,5 +32,9 @@ class DatabaseRepo private constructor(context: Context) {
         executor.execute {
             database.attendanceListDao.insertLists(*lists)
         }
+    }
+
+    fun getParticipants(): LiveData<List<Participant>> {
+        return database.participantDao.getParticipants()
     }
 }

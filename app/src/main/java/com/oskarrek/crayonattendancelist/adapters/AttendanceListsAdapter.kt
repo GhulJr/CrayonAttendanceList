@@ -44,5 +44,6 @@ class AttendanceListsAdapter() :
     class AttendanceListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title : TextView = view.findViewById(R.id.attendanceList_title)
         var date : TextView = view.findViewById(R.id.attendanceList_date)
+
     }
 }

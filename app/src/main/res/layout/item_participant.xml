@@ -6,12 +6,20 @@
                android:clickable="true"
                android:focusable="true">
 
-    <TextView  android:layout_width="wrap_content"
+    <TextView  android:id="@+id/participant_name"
+               android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_gravity="center"
-               tools:text="Oskar Rek"/>
+               tools:text="Oskar"/>
 
-    <CheckBox android:layout_width="wrap_content"
+    <TextView android:id="@+id/participant_surname"
+            android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              tools:text="Rek"/>
+
+    <CheckBox android:id="@+id/participant_checked"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center"/>
 
