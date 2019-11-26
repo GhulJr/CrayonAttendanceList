@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.oskarrek.crayonattendancelist.database.CrayonDatabase
 import com.oskarrek.crayonattendancelist.models.AttendanceList
 import com.oskarrek.crayonattendancelist.models.Participant
+import com.oskarrek.crayonattendancelist.models.Presence
 import com.oskarrek.crayonattendancelist.utils.SingletonHolder
 import java.lang.Exception
 import java.util.concurrent.Executor
@@ -24,6 +25,8 @@ class DatabaseRepo private constructor(context: Context) {
         database = Room.databaseBuilder(context, CrayonDatabase::class.java, "CrayonDatabase").build()
     }
 
+    /** Attendance list */
+
     fun getAttendanceLists(): LiveData<List<AttendanceList>> {
         return database.attendanceListDao.getAllLists()
     }
@@ -34,6 +37,8 @@ class DatabaseRepo private constructor(context: Context) {
         }
     }
 
+    /** Participant */
+
     fun getParticipants(): LiveData<List<Participant>> {
         return database.participantDao.getParticipants()
     }
@@ -41,6 +46,23 @@ class DatabaseRepo private constructor(context: Context) {
     fun insertParticipants(vararg array : Participant) {
         executor.execute {
             database.participantDao.insertParticipants(*array)
+        }
+    }
+
+    /** Presence */
+    fun getPresences(listId : Int) : LiveData<List<Presence>> {
+        return database.presenceDao.getPresenceByAttenanceListId(listId)
+    }
+
+    fun deletePresence(p: Presence) {
+        executor.execute {
+            database.presenceDao.deletePresences(p)
+        }
+    }
+
+    fun insertPresence(presence: Presence) {
+        executor.execute {
+            database.presenceDao.insertPresences(presence)
         }
     }
 }

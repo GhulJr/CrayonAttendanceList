@@ -24,10 +24,14 @@ import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), IOnCreateListListener {
 
+    private val STORARGE_REQUEST = 1001
 
     private lateinit var listsAdapter : AttendanceListsAdapter
     private lateinit var viewModel: MainActivityViewModel
 
+    companion object {
+        val ATTENDANCE_CHECK = "101"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,15 +58,35 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+
+        when(requestCode)  {
+            STORARGE_REQUEST -> {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    onStoragePermissionGranted()
+                } else {
+                    finish()
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     /** Listeners methods. */
 
     private fun onAttendanceListClick(attendanceList: AttendanceList) {
         val intent = Intent(this@MainActivity, CheckPresenceActivity::class.java)
+        intent.putExtra(ATTENDANCE_CHECK, attendanceList.id)
         startActivity(intent)
-        //TODO: Extend intent to start activity with list data.
     }
 
     /**Utils classes.*/
+
+    private fun onStoragePermissionGranted() {
+        setupViewModel()
+        setupRecyclerView()
+        viewModel.loadParticipantsFromExcel()
+    }
 
     private fun setupRecyclerView() {
         listsAdapter = AttendanceListsAdapter { attendanceList -> onAttendanceListClick(attendanceList) }
@@ -80,7 +104,7 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
             listsAdapter.notifyDataSetChanged()
         })
 
-        viewModel.loadParticipantsFromExcel()
+       // viewModel.loadParticipantsFromExcel()
     }
 
     // TODO:(O) Create separate class from it/move this method to ViewModel.
@@ -101,21 +125,15 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
 
     private fun checkPermission() : Boolean{
 
-
-        val permissionCheck = 1001
-
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                //TODO: do something here.
-            } else {
+
                 ActivityCompat.requestPermissions(
                     this,
                     Array(1) { Manifest.permission.READ_EXTERNAL_STORAGE },
-                    permissionCheck
+                    STORARGE_REQUEST
                 )
 
-            }
             return false
         }
 

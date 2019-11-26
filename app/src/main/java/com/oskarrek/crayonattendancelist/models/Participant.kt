@@ -16,12 +16,13 @@ data class Participant(
     @ColumnInfo(name = "last_name")     val lastName    : String,
     @ColumnInfo(name = "string_id")     val stringId    : String) {
 
-
-
     @Ignore
     constructor(
      firstName   : String,
         lastName    : String,
         stringId    : String
     ) : this(0, firstName, lastName, stringId)
+
+  //  @Ignore
+    //var isPresent : Boolean = false
 }

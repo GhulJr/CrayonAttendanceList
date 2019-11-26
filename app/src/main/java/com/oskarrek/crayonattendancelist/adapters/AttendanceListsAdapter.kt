@@ -45,6 +45,7 @@ class AttendanceListsAdapter(val clickListener: (AttendanceList) -> Unit) :
         fun bind(attendanceList: AttendanceList, clickListener: (AttendanceList) -> Unit) {
             view.attendanceList_title.text = attendanceList.title
             view.attendanceList_date.text = attendanceList.getDateAsString()
+
             view.setOnClickListener{ clickListener(attendanceList) }
         }
 

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.os.Environment
 import com.opencsv.CSVReader
+import com.opencsv.CSVWriter
 import com.oskarrek.crayonattendancelist.models.Participant
 import com.oskarrek.crayonattendancelist.utils.SingletonHolder
 import java.io.File
@@ -30,7 +31,6 @@ class StorageRepo private constructor(context: Context) {
         val filesInputStream = FileInputStream(getPath())
         val inputStreamReader = InputStreamReader(filesInputStream, "UTF-8")
         val csvReader = CSVReader(inputStreamReader)
-
 
         // Skip first title row.
         csvReader.readNext()

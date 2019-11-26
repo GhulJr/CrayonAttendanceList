@@ -1,5 +1,6 @@
 package com.oskarrek.crayonattendancelist.adapters
 
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +12,11 @@ import com.oskarrek.crayonattendancelist.models.AttendanceList
 import com.oskarrek.crayonattendancelist.models.Participant
 import kotlinx.android.synthetic.main.item_participant.view.*
 
-class ParticipantsAdapter : RecyclerView.Adapter<ParticipantsAdapter.ParticipantViewHolder>() {
+class ParticipantsAdapter
+    : RecyclerView.Adapter<ParticipantsAdapter.ParticipantViewHolder>() {
 
     lateinit var list : ArrayList<Participant>
+    lateinit var presenceList : SparseBooleanArray
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParticipantViewHolder {
         return ParticipantViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_participant, parent, false))
@@ -22,21 +25,29 @@ class ParticipantsAdapter : RecyclerView.Adapter<ParticipantsAdapter.Participant
     override fun getItemCount(): Int = if(::list.isInitialized) list.size else 0
 
     override fun onBindViewHolder(holder: ParticipantViewHolder, position: Int) {
+        if(!::list.isInitialized || ::presenceList.isInitialized) {return} //TODO: provide better solution.
+
         val participant = list[position]
-        holder.bind(participant)
-        //TODO: do something with checkbox
+        val isChecked = presenceList[participant.id, false]
+
+        holder.bind(participant, isChecked) {
+            presenceList.put(participant.id, it)
+            notifyItemChanged(position)
+        }
     }
 
 
     class ParticipantViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val name : TextView =  view.findViewById(R.id.participant_name)
-        val surname : TextView =  view.findViewById(R.id.participant_surname)
-        val checkBox : CheckBox = view.findViewById(R.id.participant_checked)
 
-        fun bind(participant: Participant) {
+        fun bind(participant: Participant, isChecked : Boolean, notifyAdapter: (Boolean) -> Unit ) {
             view.participant_name.text = participant.firstName
             view.participant_surname.text = participant.lastName
-            //todo:provide on click.
+            view.participant_checked.isChecked = isChecked
+
+            view.setOnClickListener {
+                view.participant_checked.isChecked = !view.participant_checked.isChecked
+                notifyAdapter(view.participant_checked.isChecked)
+            }
         }
     }
 }
