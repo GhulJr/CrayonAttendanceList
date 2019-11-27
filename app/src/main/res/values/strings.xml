@@ -6,4 +6,6 @@
     <string name="date">Data</string>
     <string name="cancel">Wróć</string>
     <string name="add">Dodaj</string>
+    <string name="load_data_from_file">Wczytaj dane z pliku</string>
+    <string name="save_data_to_file">Zapisz dane do pliku</string>
 </resources>

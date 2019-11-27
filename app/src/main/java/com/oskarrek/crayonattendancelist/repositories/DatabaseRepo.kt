@@ -8,7 +8,6 @@ import com.oskarrek.crayonattendancelist.models.AttendanceList
 import com.oskarrek.crayonattendancelist.models.Participant
 import com.oskarrek.crayonattendancelist.models.Presence
 import com.oskarrek.crayonattendancelist.utils.SingletonHolder
-import java.lang.Exception
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -43,9 +42,11 @@ class DatabaseRepo private constructor(context: Context) {
         return database.participantDao.getParticipants()
     }
 
-    fun insertParticipants(vararg array : Participant) {
+    fun insertParticipants(participant: Participant) {
         executor.execute {
-            database.participantDao.insertParticipants(*array)
+            val currentParticipant : Participant? = database.participantDao.getParticipantsBuStringId(participant.stringId)
+            if(currentParticipant == null)
+                database.participantDao.insertParticipant(participant)
         }
     }
 

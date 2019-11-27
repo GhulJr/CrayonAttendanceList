@@ -25,7 +25,7 @@ class ParticipantsAdapter
     override fun getItemCount(): Int = if(::list.isInitialized) list.size else 0
 
     override fun onBindViewHolder(holder: ParticipantViewHolder, position: Int) {
-        if(!::list.isInitialized || ::presenceList.isInitialized) {return} //TODO: provide better solution.
+        if(!::list.isInitialized || !::presenceList.isInitialized) {return} //TODO: provide better solution.
 
         val participant = list[position]
         val isChecked = presenceList[participant.id, false]

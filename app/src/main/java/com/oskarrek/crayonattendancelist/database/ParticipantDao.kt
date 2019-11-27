@@ -11,5 +11,8 @@ interface ParticipantDao {
     @Query("SELECT * FROM participants ORDER BY participants.last_name ASC")
     fun getParticipants() : LiveData<List<Participant>>
     @Insert
-    fun insertParticipants(vararg participants : Participant)
+    fun insertParticipant(participants : Participant)
+
+    @Query("SELECT * FROM participants WHERE participants.string_id = :stringId")
+    fun getParticipantsBuStringId(stringId: String): Participant?
 }

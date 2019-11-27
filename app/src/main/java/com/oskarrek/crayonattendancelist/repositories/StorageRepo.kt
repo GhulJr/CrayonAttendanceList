@@ -11,6 +11,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -29,7 +30,7 @@ class StorageRepo private constructor(context: Context) {
         val participantList = ArrayList<Participant>()
 
         val filesInputStream = FileInputStream(getPath())
-        val inputStreamReader = InputStreamReader(filesInputStream, "UTF-8")
+        val inputStreamReader = InputStreamReader(filesInputStream, "iso-8859-2")
         val csvReader = CSVReader(inputStreamReader)
 
         // Skip first title row.
@@ -42,7 +43,6 @@ class StorageRepo private constructor(context: Context) {
             participantList.add(Participant(next[1], next[2], next[3]))
             next = csvReader.readNext()
         }
-
         return participantList
     }
 

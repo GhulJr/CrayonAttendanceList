@@ -33,6 +33,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun loadParticipantsFromExcel() {
+
         val list = storageRepo.loadParticipantsFromExcel()
 
         for(participant in list){

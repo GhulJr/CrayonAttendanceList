@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -53,7 +54,14 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
 
     override fun onOptionsItemSelected(item : MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_read_data -> {
+                viewModel.loadParticipantsFromExcel()
+                true
+            }
+            R.id.action_save_data -> {
+                Toast.makeText(this, "[DEBUG] in progress", Toast.LENGTH_SHORT).show()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
