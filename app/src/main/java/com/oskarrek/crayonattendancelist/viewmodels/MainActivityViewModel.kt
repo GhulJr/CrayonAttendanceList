@@ -11,9 +11,7 @@ import com.oskarrek.crayonattendancelist.repositories.StorageRepo
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
-
-
-
+import java.lang.RuntimeException
 
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
@@ -32,6 +30,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         repoDB.insertAttendanceLists(list)
     }
 
+    @Throws(Exception::class)
     fun loadParticipantsFromExcel() {
 
         val list = storageRepo.loadParticipantsFromExcel()
@@ -39,5 +38,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         for(participant in list){
             repoDB.insertParticipants(participant)
         }
+    }
+
+    fun createAppFolderIfMissing() {
+        storageRepo.createAppFolder()
     }
 }

@@ -8,4 +8,7 @@
     <string name="add">Dodaj</string>
     <string name="load_data_from_file">Wczytaj dane z pliku</string>
     <string name="save_data_to_file">Zapisz dane do pliku</string>
+    <string name="missing_csv_file">Brak pliku .csv bądź błędna nazwa/format</string>
+    <string name="participants_data_updated">Zaktualizowana bazę uczestników</string>
+    <string name="save">Zapisz</string>
 </resources>

@@ -2,6 +2,8 @@ package com.oskarrek.crayonattendancelist.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -12,6 +14,7 @@ import com.oskarrek.crayonattendancelist.adapters.ParticipantsAdapter
 import com.oskarrek.crayonattendancelist.models.Participant
 import com.oskarrek.crayonattendancelist.utils.CheckPresenceViewModelFactory
 import com.oskarrek.crayonattendancelist.viewmodels.CheckPresenceViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_check_presence.*
 
 class CheckPresenceActivity : AppCompatActivity() {
@@ -24,11 +27,29 @@ class CheckPresenceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_presence)
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        setSupportActionBar(toolbar)
 
         handleIntent()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_check_presence, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item : MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_save_list -> {
+                onBackPressed()
+                true
+            }
+            R.id.action_discard_list -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onBackPressed() {

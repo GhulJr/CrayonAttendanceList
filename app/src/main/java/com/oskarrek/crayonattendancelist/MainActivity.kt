@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -22,9 +23,11 @@ import com.oskarrek.crayonattendancelist.viewmodels.MainActivityViewModel
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity(), IOnCreateListListener {
 
+    private val TAG = MainActivity.javaClass.simpleName
     private val STORARGE_REQUEST = 1001
 
     private lateinit var listsAdapter : AttendanceListsAdapter
@@ -43,6 +46,7 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
         if(checkPermission()) {
             setupViewModel()
             setupRecyclerView()
+            viewModel.createAppFolderIfMissing()
         }
     }
 
@@ -55,7 +59,7 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
     override fun onOptionsItemSelected(item : MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_read_data -> {
-                viewModel.loadParticipantsFromExcel()
+                loadParticipants()
                 true
             }
             R.id.action_save_data -> {
@@ -93,7 +97,7 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
     private fun onStoragePermissionGranted() {
         setupViewModel()
         setupRecyclerView()
-        viewModel.loadParticipantsFromExcel()
+        loadParticipants()
     }
 
     private fun setupRecyclerView() {
@@ -138,7 +142,7 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
 
                 ActivityCompat.requestPermissions(
                     this,
-                    Array(1) { Manifest.permission.READ_EXTERNAL_STORAGE },
+                    Array(1) { Manifest.permission.READ_EXTERNAL_STORAGE},
                     STORARGE_REQUEST
                 )
 
@@ -148,6 +152,17 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
         return true
     }
 
+    private fun  loadParticipants() {
+      try {
+          viewModel.loadParticipantsFromExcel()
+      } catch (e : Exception) {
+          Log.e(TAG, "Unable to load from csv file.", e)
+          Toast.makeText(this, R.string.missing_csv_file, Toast.LENGTH_LONG).show()
+      }
+
+        Toast.makeText(this, getString(R.string.participants_data_updated), Toast.LENGTH_LONG).show()
+
+    }
 
     /**Interfaces.*/
 

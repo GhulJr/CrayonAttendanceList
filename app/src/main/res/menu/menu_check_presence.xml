@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.oskarrek.crayonattendancelist.activities.CheckPresenceActivity">
+
+    <item android:id="@+id/action_save_list"
+          android:title="@string/save"
+          android:icon="@drawable/ic_check"
+          android:orderInCategory="200"
+          app:showAsAction="ifRoom"/>
+    <item android:id="@+id/action_discard_list"
+          android:title="@string/save"
+          android:icon="@drawable/ic_cancel"
+          android:orderInCategory="100"
+          app:showAsAction="ifRoom"/>
+
+</menu>
