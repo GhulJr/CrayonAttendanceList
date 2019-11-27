@@ -4,7 +4,8 @@
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:clickable="true"
-               android:focusable="true">
+               android:focusable="true"
+               android:background="@drawable/ripple_effect">
 
     <CheckBox android:id="@+id/participant_checked"
               android:layout_weight="0.1"
