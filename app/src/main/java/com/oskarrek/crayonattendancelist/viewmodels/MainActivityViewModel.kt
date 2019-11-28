@@ -21,7 +21,6 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     val attendanceLists: LiveData<List<AttendanceList>>
 
-
     init {
         attendanceLists = repoDB.getAttendanceLists()
     }

@@ -17,6 +17,7 @@ class ParticipantsAdapter
 
     lateinit var list : ArrayList<Participant>
     lateinit var presenceList : SparseBooleanArray
+    var isChanged = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParticipantViewHolder {
         return ParticipantViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_participant, parent, false))
@@ -33,6 +34,7 @@ class ParticipantsAdapter
         holder.bind(participant, isChecked) {
             presenceList.put(participant.id, it)
             notifyItemChanged(position)
+            isChanged = true
         }
     }
 

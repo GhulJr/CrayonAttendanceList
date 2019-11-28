@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,11 +42,12 @@ class CheckPresenceActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item : MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_save_list -> {
-                onBackPressed()
+                saveList()
+                finish()
                 true
             }
             R.id.action_discard_list -> {
-                finish()
+                onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -53,8 +55,11 @@ class CheckPresenceActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        viewModel.savePresences(participantsAdapter.presenceList)
-        super.onBackPressed()
+        if(participantsAdapter.isChanged) {
+            checkIfModified()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     private fun handleIntent() {
@@ -93,6 +98,24 @@ class CheckPresenceActivity : AppCompatActivity() {
         } )
     }
 
+    private fun checkIfModified() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.unsaved_changes)
+            .setMessage(R.string.unsaved_changes_message)
+            .setPositiveButton(R.string.yes) { _,_ ->
+                saveList()
+                finish()
+            }
+            .setNegativeButton(R.string.no) { _,_ ->
+                finish()
+            }
+            .setNeutralButton(R.string.cancel) { _,_ ->}
+            .show()
+    }
+
+    private fun saveList() {
+        viewModel.savePresences(participantsAdapter.presenceList)
+    }
     private fun getDummyData() : ArrayList<Participant> {
         val list = ArrayList<Participant>()
 
