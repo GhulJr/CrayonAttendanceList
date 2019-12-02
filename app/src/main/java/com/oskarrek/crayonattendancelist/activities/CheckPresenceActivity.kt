@@ -15,8 +15,9 @@ import com.oskarrek.crayonattendancelist.adapters.ParticipantsAdapter
 import com.oskarrek.crayonattendancelist.models.Participant
 import com.oskarrek.crayonattendancelist.utils.CheckPresenceViewModelFactory
 import com.oskarrek.crayonattendancelist.viewmodels.CheckPresenceViewModel
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_check_presence.*
 import kotlinx.android.synthetic.main.content_check_presence.*
+import kotlinx.android.synthetic.main.content_main.*
 
 class CheckPresenceActivity : AppCompatActivity() {
 
@@ -28,8 +29,7 @@ class CheckPresenceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_presence)
-        setSupportActionBar(toolbar)
-
+        setSupportActionBar(check_presence_toolbar)
         handleIntent()
     }
 
@@ -63,12 +63,20 @@ class CheckPresenceActivity : AppCompatActivity() {
     }
 
     private fun handleIntent() {
-        if(intent.hasExtra(MainActivity.ATTENDANCE_CHECK)) {
+        // Check if attendance list has been passed as intent extra,
+        // otherwise finish activity.
+        if(intent.hasExtra(MainActivity.ATTENDANCELIST_ID)) {
             setupRecyclerView()
-            setupViewModel(intent.getIntExtra(MainActivity.ATTENDANCE_CHECK, -1))
-        } else {
+            setupViewModel(intent.getIntExtra(MainActivity.ATTENDANCELIST_ID, -1))
+        }
+        else {
             Toast.makeText(application, "Brak listy obecności bądź błędne dane", Toast.LENGTH_SHORT).show()
             finish()
+        }
+
+        // List name is not so critical, so we won't finish activity if it doesn't exist.
+        if(intent.hasExtra(MainActivity.ATTENDANCELIST_TITLE)) {
+            supportActionBar?.title = intent.getStringExtra(MainActivity.ATTENDANCELIST_TITLE)
         }
     }
 

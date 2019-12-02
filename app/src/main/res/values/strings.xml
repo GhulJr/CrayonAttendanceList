@@ -15,4 +15,6 @@
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
     <string name="cancel">Wróć</string>
+    <string name="edit">Edytuj</string>
+    <string name="delete">Usuń</string>
 </resources>

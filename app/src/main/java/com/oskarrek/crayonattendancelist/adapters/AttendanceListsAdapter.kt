@@ -2,9 +2,11 @@ package com.oskarrek.crayonattendancelist.adapters
 
 import android.annotation.TargetApi
 import android.os.Build
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.oskarrek.crayonattendancelist.R
@@ -38,15 +40,23 @@ class AttendanceListsAdapter(val clickListener: (AttendanceList) -> Unit) :
     }
 
 
-    class AttendanceListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        var title : TextView = view.findViewById(R.id.attendanceList_title)
-        var date : TextView = view.findViewById(R.id.attendanceList_date)
+    class AttendanceListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(attendanceList: AttendanceList, clickListener: (AttendanceList) -> Unit) {
-            view.attendanceList_title.text = attendanceList.title
-            view.attendanceList_date.text = attendanceList.getDateAsString()
+            itemView.apply {
+                attendanceList_title.text = attendanceList.title
+                attendanceList_date.text = attendanceList.getDateAsString()
+                setOnClickListener{ clickListener(attendanceList) }
+                setOnLongClickListener {createPopupMenu(attendanceList)}
+            }
+        }
 
-            view.setOnClickListener{ clickListener(attendanceList) }
+        private fun createPopupMenu(attendanceList: AttendanceList) : Boolean {
+            PopupMenu(itemView.context, itemView).apply {
+                inflate(R.menu.menu_attendance_list)
+            }.show()
+            return true
+
         }
 
     }

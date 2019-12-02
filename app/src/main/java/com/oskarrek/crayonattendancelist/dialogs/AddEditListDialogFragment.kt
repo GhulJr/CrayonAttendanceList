@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.oskarrek.crayonattendancelist.R
@@ -51,10 +52,19 @@ class AddEditListDialogFragment : DialogFragment() {
                 }
                 ?.setPositiveButton(getString(R.string.add)) { dialog, _ ->
                     val title : String = addLayout.attendanceList_editTitle.text.toString()
-                    val date : Long = addLayout.attendanceList_editDate.tag as Long //TODO: (O) provide solution for this
+                    val date : Long = (addLayout.attendanceList_editDate.tag ?: 0L) as Long
 
-                    onEditListener.onCreate(AttendanceList(title, date))
-                    dialog.dismiss()
+                    if(title.isBlank() || date == 0L) {
+                        Toast
+                            .makeText(
+                            context,
+                            "Nie można stworzyć listy - niepełne dane",
+                            Toast.LENGTH_LONG)
+                            .show()
+                    } else {
+                        onEditListener.onCreate(AttendanceList(title, date))
+                    }
+
                 }?.create()
 
 

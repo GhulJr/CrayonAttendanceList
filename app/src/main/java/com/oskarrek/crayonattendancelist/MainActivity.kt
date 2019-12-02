@@ -5,9 +5,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextMenu
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -33,20 +35,35 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
     private lateinit var listsAdapter : AttendanceListsAdapter
     private lateinit var viewModel: MainActivityViewModel
 
+    //TODO: Should be owned by AttendanceList class.
     companion object {
-        val ATTENDANCE_CHECK = "101"
+        val ATTENDANCELIST_ID = "101"
+        val ATTENDANCELIST_TITLE = "102"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(main_activity_toolbar)
         fab.setOnClickListener { addAttendanceList() }
 
         if(checkPermission()) {
             setupViewModel()
             setupRecyclerView()
             viewModel.createAppFolderIfMissing()
+        }
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?,menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menuInflater.inflate(R.menu.menu_attendance_list, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_edit_list -> true
+            R.id.action_delete_list -> true
+            else -> super.onContextItemSelected(item)
         }
     }
 
@@ -88,7 +105,8 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
 
     private fun onAttendanceListClick(attendanceList: AttendanceList) {
         val intent = Intent(this@MainActivity, CheckPresenceActivity::class.java)
-        intent.putExtra(ATTENDANCE_CHECK, attendanceList.id)
+        intent.putExtra(ATTENDANCELIST_ID, attendanceList.id)
+        intent.putExtra(ATTENDANCELIST_TITLE, attendanceList.title)
         startActivity(intent)
     }
 
