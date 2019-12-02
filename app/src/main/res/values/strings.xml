@@ -8,13 +8,15 @@
     <string name="load_data_from_file">Wczytaj dane z pliku</string>
     <string name="save_data_to_file">Zapisz dane do pliku</string>
     <string name="missing_csv_file">Brak pliku .csv bądź błędna nazwa/format</string>
-    <string name="participants_data_updated">Zaktualizowana bazę uczestników</string>
+    <string name="participants_data_updated">Zaktualizowano bazę uczestników</string>
     <string name="save">Zapisz</string>
     <string name="unsaved_changes">Niezapisane zmiany</string>
     <string name="unsaved_changes_message">Lista została zmieniona. Czy chcesz zapisać zmiany?</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
     <string name="cancel">Wróć</string>
+    <string name="empty_data">Niepełne dane, nie utworzono listy.</string>
     <string name="edit">Edytuj</string>
     <string name="delete">Usuń</string>
+    <string name="data_empty">Nie można stworzyć listy - niepełne dane</string>
 </resources>

@@ -2,6 +2,7 @@ package com.oskarrek.crayonattendancelist.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.oskarrek.crayonattendancelist.models.AttendanceList
@@ -14,4 +15,7 @@ interface AttendanceListDao {
 
     @Insert
     fun insertLists(vararg lists : AttendanceList)
+
+    @Delete
+    fun deleteLists(vararg lists : AttendanceList)
 }

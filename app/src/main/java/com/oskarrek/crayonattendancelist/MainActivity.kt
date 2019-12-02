@@ -19,7 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.oskarrek.crayonattendancelist.activities.CheckPresenceActivity
 import com.oskarrek.crayonattendancelist.adapters.AttendanceListsAdapter
 import com.oskarrek.crayonattendancelist.dialogs.AddEditListDialogFragment
-import com.oskarrek.crayonattendancelist.interfaces.IOnCreateListListener
+import com.oskarrek.crayonattendancelist.interfaces.IOnListDialogListener
+import com.oskarrek.crayonattendancelist.interfaces.IOnListMenuListener
 import com.oskarrek.crayonattendancelist.models.AttendanceList
 import com.oskarrek.crayonattendancelist.viewmodels.MainActivityViewModel
 
@@ -27,7 +28,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.lang.Exception
 
-class MainActivity : AppCompatActivity(), IOnCreateListListener {
+class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuListener{
 
     private val TAG = MainActivity.javaClass.simpleName
     private val STORARGE_REQUEST = 1001
@@ -119,7 +120,7 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
     }
 
     private fun setupRecyclerView() {
-        listsAdapter = AttendanceListsAdapter { attendanceList -> onAttendanceListClick(attendanceList) }
+        listsAdapter = AttendanceListsAdapter(this) { attendanceList -> onAttendanceListClick(attendanceList) }
 
         attendanceList_recyclerView.apply {
             this.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -178,7 +179,7 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
           Toast.makeText(this, R.string.missing_csv_file, Toast.LENGTH_LONG).show()
       }
 
-        Toast.makeText(this, getString(R.string.participants_data_updated), Toast.LENGTH_LONG).show()
+        Toast.makeText(this, R.string.participants_data_updated, Toast.LENGTH_LONG).show()
 
     }
 
@@ -186,5 +187,14 @@ class MainActivity : AppCompatActivity(), IOnCreateListListener {
 
     override fun onCreate(list : AttendanceList) {
         viewModel.addAttendanceList(list)
+    }
+
+    override fun onDelete(list: AttendanceList) {
+        viewModel.deleteAttendanceList(list)
+        listsAdapter.notifyDataSetChanged()
+    }
+
+    override fun onEdit(list: AttendanceList) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

@@ -1,24 +1,15 @@
 package com.oskarrek.crayonattendancelist.adapters
 
-import android.annotation.TargetApi
-import android.os.Build
-import android.view.ContextMenu
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.PopupMenu
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.oskarrek.crayonattendancelist.R
+import com.oskarrek.crayonattendancelist.interfaces.IOnListMenuListener
 import com.oskarrek.crayonattendancelist.models.AttendanceList
-import com.oskarrek.crayonattendancelist.models.Participant
 import kotlinx.android.synthetic.main.item_attendance_list.view.*
-import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.collections.ArrayList
 
-class AttendanceListsAdapter(val clickListener: (AttendanceList) -> Unit) :
+class AttendanceListsAdapter(val onMenuItemListener : IOnListMenuListener, val clickListener: (AttendanceList) -> Unit) :
     RecyclerView.Adapter<AttendanceListsAdapter.AttendanceListViewHolder>() {
 
     lateinit var list : ArrayList<AttendanceList>
@@ -34,7 +25,7 @@ class AttendanceListsAdapter(val clickListener: (AttendanceList) -> Unit) :
 
     override fun onBindViewHolder(holder: AttendanceListViewHolder, position: Int) {
         val currentList = list[position]
-        holder.bind(currentList, clickListener)
+        holder.bind(currentList, onMenuItemListener, clickListener)
         //holder.title.text = currentList.title
         //holder.date.text = formatDate(currentList.dateInMillis)
     }
@@ -42,18 +33,37 @@ class AttendanceListsAdapter(val clickListener: (AttendanceList) -> Unit) :
 
     class AttendanceListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(attendanceList: AttendanceList, clickListener: (AttendanceList) -> Unit) {
+        //TODO: Maybe collapse menuListener and clickListener?
+        fun bind(attendanceList: AttendanceList, menuListener: IOnListMenuListener ,clickListener: (AttendanceList) -> Unit) {
             itemView.apply {
                 attendanceList_title.text = attendanceList.title
                 attendanceList_date.text = attendanceList.getDateAsString()
                 setOnClickListener{ clickListener(attendanceList) }
-                setOnLongClickListener {createPopupMenu(attendanceList)}
+                setOnLongClickListener {createPopupMenu(menuListener, attendanceList)}
             }
         }
 
-        private fun createPopupMenu(attendanceList: AttendanceList) : Boolean {
+        private fun createPopupMenu(menuListener: IOnListMenuListener,attendanceList: AttendanceList) : Boolean {
             PopupMenu(itemView.context, itemView).apply {
                 inflate(R.menu.menu_attendance_list)
+                gravity = Gravity.END
+
+                setOnMenuItemClickListener { item ->
+                    return@setOnMenuItemClickListener when(item.itemId) {
+                        R.id.action_edit_list -> {
+                            menuListener.onEdit(attendanceList)
+                            true
+                        }
+
+                        R.id.action_delete_list -> {
+                            menuListener.onDelete(attendanceList)
+                            true
+                        }
+
+
+                        else -> false
+                    }
+                }
             }.show()
             return true
 

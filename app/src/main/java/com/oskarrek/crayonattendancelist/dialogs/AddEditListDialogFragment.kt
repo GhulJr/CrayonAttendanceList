@@ -6,26 +6,25 @@ import android.content.Context
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.oskarrek.crayonattendancelist.R
-import com.oskarrek.crayonattendancelist.interfaces.IOnCreateListListener
+import com.oskarrek.crayonattendancelist.interfaces.IOnListDialogListener
 import com.oskarrek.crayonattendancelist.models.AttendanceList
 import kotlinx.android.synthetic.main.dialog_add_list.view.*
 import java.lang.Exception
 
 class AddEditListDialogFragment : DialogFragment() {
 
-    lateinit var onEditListener : IOnCreateListListener
+    lateinit var onEditListener : IOnListDialogListener
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         try {
-            onEditListener = context as IOnCreateListListener
+            onEditListener = context as IOnListDialogListener
         } catch (e : Exception) {
 
             throw ClassCastException((context.toString() +
@@ -58,7 +57,7 @@ class AddEditListDialogFragment : DialogFragment() {
                         Toast
                             .makeText(
                             context,
-                            "Nie można stworzyć listy - niepełne dane",
+                            R.string.data_empty,
                             Toast.LENGTH_LONG)
                             .show()
                     } else {

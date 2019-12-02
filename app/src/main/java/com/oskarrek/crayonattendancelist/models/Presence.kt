@@ -9,12 +9,16 @@ import androidx.room.PrimaryKey
     ForeignKey(
             entity = AttendanceList::class,
             parentColumns = ["id"],
-            childColumns = ["attendanceListId"]),
+            childColumns = ["attendanceListId"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE),
 
     ForeignKey(
                 entity = Participant::class,
                 parentColumns = ["id"],
-                childColumns = ["participantId"])
+                childColumns = ["participantId"],
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE)
         ]
 )
 

@@ -2,6 +2,7 @@ package com.oskarrek.crayonattendancelist.interfaces
 
 import com.oskarrek.crayonattendancelist.models.AttendanceList
 
-interface IOnCreateListListener {
-    fun onCreate(list : AttendanceList)
+interface IOnListMenuListener {
+    fun onDelete(list : AttendanceList)
+    fun onEdit(list : AttendanceList)
 }
