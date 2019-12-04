@@ -5,11 +5,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextMenu
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -59,19 +57,6 @@ class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuList
         }
     }
 
-    override fun onCreateContextMenu(menu: ContextMenu?, v: View?,menuInfo: ContextMenu.ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        menuInflater.inflate(R.menu.menu_attendance_list, menu)
-    }
-
-    override fun onContextItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            R.id.action_edit_list -> true
-            R.id.action_delete_list -> true
-            else -> super.onContextItemSelected(item)
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -81,11 +66,11 @@ class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuList
     override fun onOptionsItemSelected(item : MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_read_data -> {
-                loadParticipants()
+                loadParticipantsFromCsv()
                 true
             }
             R.id.action_save_data -> {
-                Toast.makeText(this, "[DEBUG] in progress", Toast.LENGTH_SHORT).show()
+                saveParticipantsToCsv()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -120,7 +105,7 @@ class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuList
     private fun onStoragePermissionGranted() {
         setupViewModel()
         setupRecyclerView()
-        loadParticipants()
+        loadParticipantsFromCsv()
     }
 
     private fun setupRecyclerView() {
@@ -139,12 +124,12 @@ class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuList
 
     private fun setupViewModel() {
         viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-        viewModel.attendanceLists.observe(this, Observer {list ->
+        viewModel.listsLiveData.observe(this, Observer { list ->
             listsAdapter.list = ArrayList(list) // Might cause a problem.
             listsAdapter.notifyDataSetChanged()
         })
 
-       // viewModel.loadParticipantsFromExcel()
+       // viewModel.loadParticipantsFromCsv()
     }
 
     private fun startAddEditListDialog(bundle : Bundle) {
@@ -182,9 +167,9 @@ class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuList
         return true
     }
 
-    private fun  loadParticipants() {
+    private fun loadParticipantsFromCsv() {
       try {
-          viewModel.loadParticipantsFromExcel()
+          viewModel.loadParticipantsFromCsv()
       } catch (e : Exception) {
           Log.e(TAG, "Unable to load from csv file.", e)
           Toast.makeText(this, R.string.missing_csv_file, Toast.LENGTH_LONG).show()
@@ -192,6 +177,10 @@ class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuList
 
         Toast.makeText(this, R.string.participants_data_updated, Toast.LENGTH_LONG).show()
 
+    }
+
+    private fun saveParticipantsToCsv() {
+        viewModel.saveParticipantsToCsv()
     }
 
     /**Interfaces.*/

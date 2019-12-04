@@ -103,6 +103,7 @@ class CheckPresenceActivity : AppCompatActivity() {
         viewModel.presencesLiveData.observe(this, Observer {
             viewModel.presencesList = it.toMutableList()
             participantsAdapter.presenceList = viewModel.getPresenceBooleanArray(it)
+            participantsAdapter.notifyDataSetChanged()
         } )
     }
 

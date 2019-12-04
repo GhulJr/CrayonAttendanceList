@@ -9,7 +9,11 @@ import com.oskarrek.crayonattendancelist.models.Participant
 @Dao
 interface ParticipantDao {
     @Query("SELECT * FROM participants ORDER BY participants.last_name ASC")
-    fun getParticipants() : LiveData<List<Participant>>
+    fun getParticipantsLiveData() : LiveData<List<Participant>>
+
+    @Query("SELECT * FROM participants ORDER BY participants.last_name ASC")
+    fun getParticipants() : List<Participant>
+
     @Insert
     fun insertParticipant(participants : Participant)
 

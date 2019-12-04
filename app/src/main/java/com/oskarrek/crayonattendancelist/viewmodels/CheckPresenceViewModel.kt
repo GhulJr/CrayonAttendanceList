@@ -17,8 +17,8 @@ class CheckPresenceViewModel(application : Application,
 
 
     init {
-        participants = repoDB.getParticipants()
-        presencesLiveData = repoDB.getPresences(attendanceListId)
+        participants = repoDB.getParticipantsLiveData()
+        presencesLiveData = repoDB.getPresencesLiveData(attendanceListId)
         //TODO: provide transformation to SparseBooleanArray.
     }
 

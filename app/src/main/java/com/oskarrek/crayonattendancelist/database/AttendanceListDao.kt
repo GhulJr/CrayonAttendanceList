@@ -8,7 +8,10 @@ import com.oskarrek.crayonattendancelist.models.AttendanceList
 interface AttendanceListDao {
 
     @Query("SELECT * FROM attendance_lists")
-    fun getAllLists() : LiveData<List<AttendanceList>>
+    fun getAllListsLiveData() : LiveData<List<AttendanceList>>
+
+    @Query("SELECT * FROM attendance_lists ORDER BY date_in_millis ASC")
+    fun getLists() : List<AttendanceList>
 
     @Insert
     fun insertLists(vararg lists : AttendanceList)

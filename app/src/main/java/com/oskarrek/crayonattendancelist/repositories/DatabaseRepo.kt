@@ -26,9 +26,7 @@ class DatabaseRepo private constructor(context: Context) {
 
     /** Attendance list */
 
-    fun getAttendanceLists(): LiveData<List<AttendanceList>> {
-        return database.attendanceListDao.getAllLists()
-    }
+    fun getAttendanceListsLiveData(): LiveData<List<AttendanceList>> = database.attendanceListDao.getAllListsLiveData()
 
     fun insertAttendanceLists(vararg lists : AttendanceList) {
         executor.execute {
@@ -50,9 +48,11 @@ class DatabaseRepo private constructor(context: Context) {
 
     /** Participant */
 
-    fun getParticipants(): LiveData<List<Participant>> {
-        return database.participantDao.getParticipants()
-    }
+    fun getParticipantsLiveData(): LiveData<List<Participant>> = database.participantDao.getParticipantsLiveData()
+
+
+    fun getParticipants() : List<Participant> = database.participantDao.getParticipants()
+
 
     fun insertParticipants(participant: Participant) {
         executor.execute {
@@ -64,9 +64,10 @@ class DatabaseRepo private constructor(context: Context) {
 
     /** Presence */
 
-    fun getPresences(listId : Int) : LiveData<List<Presence>> {
-        return database.presenceDao.getPresenceByAttendanceListId(listId)
-    }
+    fun getPresencesLiveData(listId : Int) : LiveData<List<Presence>> = database.presenceDao.getPresenceByAttendanceListId(listId)
+
+
+    fun getPresenceByParticipantId(participantId : Int) : List<Presence> = database.presenceDao.getPresenceByParticipantId(participantId)
 
     fun deletePresence(p: Presence) {
         executor.execute {
@@ -79,5 +80,8 @@ class DatabaseRepo private constructor(context: Context) {
             database.presenceDao.insertPresences(presence)
         }
     }
+
+    fun getAttendanceLists(): List<AttendanceList> = database.attendanceListDao.getLists()
+
 
 }

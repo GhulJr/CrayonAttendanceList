@@ -13,10 +13,11 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     private val databaseRepo : DatabaseRepo = DatabaseRepo.getInstance(application)
     private val storageRepo: StorageRepo = StorageRepo.getInstance(application)
 
-    val attendanceLists: LiveData<List<AttendanceList>>
+
+    val listsLiveData: LiveData<List<AttendanceList>>
 
     init {
-        attendanceLists = databaseRepo.getAttendanceLists()
+        listsLiveData = databaseRepo.getAttendanceListsLiveData()
     }
 
         /** Attendance List */
@@ -36,19 +37,26 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         /** Participant */
 
     @Throws(Exception::class)
-    fun loadParticipantsFromExcel() {
+    fun loadParticipantsFromCsv() {
 
-        val list = storageRepo.loadParticipantsFromExcel()
+        val list = storageRepo.loadParticipantsFromCsv()
 
         for(participant in list){
             databaseRepo.insertParticipants(participant)
         }
     }
+
+    fun saveParticipantsToCsv() {
+        //TODO: do something with this method (repo used inside repo, sounds awful).
+        storageRepo.saveParticipantsToCsv({databaseRepo.getAttendanceLists()},{databaseRepo.getParticipants()},{ participantId -> databaseRepo.getPresenceByParticipantId(participantId)} )
+    }
+
         /** Storage */
 
     fun createAppFolderIfMissing() {
         storageRepo.createAppFolder()
     }
+
 
 
 }

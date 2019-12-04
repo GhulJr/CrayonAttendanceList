@@ -14,6 +14,9 @@ interface PresenceDao {
     @Query("SELECT * FROM presence WHERE attendanceListId = :listId")
     fun getPresenceByAttendanceListId(listId : Int) : LiveData<List<Presence>>
 
+    @Query("SELECT * FROM presence WHERE participantId = :participantId")
+    fun getPresenceByParticipantId(participantId : Int) : List<Presence>
+
     @Delete
     fun deletePresences(vararg p : Presence)
 
