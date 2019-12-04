@@ -1,20 +1,13 @@
 package com.oskarrek.crayonattendancelist.repositories
 
-import android.app.Application
 import android.content.Context
 import android.os.Environment
 import android.util.Log
 import com.opencsv.CSVReader
-import com.opencsv.CSVWriter
 import com.oskarrek.crayonattendancelist.models.Participant
 import com.oskarrek.crayonattendancelist.utils.SingletonHolder
 import java.io.*
 import java.lang.Exception
-import java.lang.RuntimeException
-import java.nio.charset.Charset
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
 
 class StorageRepo private constructor(context: Context) {
 
@@ -29,7 +22,7 @@ class StorageRepo private constructor(context: Context) {
     fun loadParticipantsFromExcel() : ArrayList<Participant> {
 
         val participantList = ArrayList<Participant>()
-            val filesInputStream = FileInputStream(getPath())
+            val filesInputStream = FileInputStream(getFilePath())
             val inputStreamReader = InputStreamReader(filesInputStream, "iso-8859-2")
             val csvReader = CSVReader(inputStreamReader)
 
@@ -47,13 +40,14 @@ class StorageRepo private constructor(context: Context) {
         return participantList
     }
 
-    private fun getPath() : String {
-        return Environment.getExternalStorageDirectory().path + File.separator + folderName + File.separator + fileName
-    }
+    private fun getFilePath() : String = getFolderPath() + fileName
+
+
+    private fun getFolderPath() : String =
+        Environment.getExternalStorageDirectory().path + File.separator + folderName+ File.separator
 
     fun createAppFolder() {
-        val dir = File(getPath())
-
+        val dir = File(getFolderPath())
         if(!dir.exists()) {
             dir.mkdirs()
         }

@@ -36,6 +36,12 @@ class DatabaseRepo private constructor(context: Context) {
         }
     }
 
+    fun updateAttendanceList(list: AttendanceList) {
+        executor.execute {
+            database.attendanceListDao.updateLists(list)
+        }
+    }
+
     fun deleteAttendanceList(list: AttendanceList) {
         executor.execute {
             database.attendanceListDao.deleteLists(list)
@@ -59,7 +65,7 @@ class DatabaseRepo private constructor(context: Context) {
     /** Presence */
 
     fun getPresences(listId : Int) : LiveData<List<Presence>> {
-        return database.presenceDao.getPresenceByAttenanceListId(listId)
+        return database.presenceDao.getPresenceByAttendanceListId(listId)
     }
 
     fun deletePresence(p: Presence) {

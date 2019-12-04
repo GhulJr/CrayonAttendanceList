@@ -12,7 +12,7 @@ interface PresenceDao {
 
 
     @Query("SELECT * FROM presence WHERE attendanceListId = :listId")
-    fun getPresenceByAttenanceListId(listId : Int) : LiveData<List<Presence>>
+    fun getPresenceByAttendanceListId(listId : Int) : LiveData<List<Presence>>
 
     @Delete
     fun deletePresences(vararg p : Presence)

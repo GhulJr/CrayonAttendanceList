@@ -30,8 +30,10 @@ import java.lang.Exception
 
 class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuListener{
 
-    private val TAG = MainActivity.javaClass.simpleName
+    private val TAG = MainActivity::class.java.simpleName
     private val STORARGE_REQUEST = 1001
+    var STORAGE_PERMISSIONS = Array(2){Manifest.permission.READ_EXTERNAL_STORAGE; Manifest.permission.WRITE_EXTERNAL_STORAGE}
+
 
     private lateinit var listsAdapter : AttendanceListsAdapter
     private lateinit var viewModel: MainActivityViewModel
@@ -40,13 +42,15 @@ class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuList
     companion object {
         val ATTENDANCELIST_ID = "101"
         val ATTENDANCELIST_TITLE = "102"
+        val ATTENDANCELIST_TIMESPAN = "103"
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(main_activity_toolbar)
-        fab.setOnClickListener { addAttendanceList() }
+        fab.setOnClickListener { startAddEditListDialog(Bundle()) }
 
         if(checkPermission()) {
             setupViewModel()
@@ -128,6 +132,11 @@ class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuList
         }
     }
 
+    /*override fun onResume() {
+        super.onResume()
+        listsAdapter.notifyDataSetChanged()
+    }*/
+
     private fun setupViewModel() {
         viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
         viewModel.attendanceLists.observe(this, Observer {list ->
@@ -138,10 +147,11 @@ class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuList
        // viewModel.loadParticipantsFromExcel()
     }
 
-    // TODO:(O) Create separate class from it/move this method to ViewModel.
-    private fun addAttendanceList() {
-        val dialogFragment = AddEditListDialogFragment()
-        dialogFragment.show(supportFragmentManager, "AddEditListDialogFragment")
+    private fun startAddEditListDialog(bundle : Bundle) {
+        val dialogFragment = AddEditListDialogFragment().apply {
+            arguments = bundle
+            show(supportFragmentManager, "AddEditListDialogFragment")
+        }
     }
 
     private fun getDummyData() : ArrayList<AttendanceList>{
@@ -156,12 +166,13 @@ class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuList
 
     private fun checkPermission() : Boolean{
 
+
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
                 ActivityCompat.requestPermissions(
                     this,
-                    Array(1) { Manifest.permission.READ_EXTERNAL_STORAGE},
+                    STORAGE_PERMISSIONS,
                     STORARGE_REQUEST
                 )
 
@@ -189,12 +200,21 @@ class MainActivity : AppCompatActivity(), IOnListDialogListener, IOnListMenuList
         viewModel.addAttendanceList(list)
     }
 
+    override fun onUpdate(list: AttendanceList) {
+       viewModel.updateAttendanceList(list)
+    }
+
     override fun onDelete(list: AttendanceList) {
         viewModel.deleteAttendanceList(list)
         listsAdapter.notifyDataSetChanged()
     }
 
     override fun onEdit(list: AttendanceList) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val bundle = Bundle().apply {
+            putInt(ATTENDANCELIST_ID, list.id)
+            putString(ATTENDANCELIST_TITLE, list.title)
+            putLong(ATTENDANCELIST_TIMESPAN, list.dateInMillis)
+        }
+        startAddEditListDialog(bundle)
     }
 }

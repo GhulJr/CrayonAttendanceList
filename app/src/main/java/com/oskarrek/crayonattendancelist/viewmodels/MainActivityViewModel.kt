@@ -25,6 +25,10 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         databaseRepo.insertAttendanceLists(list)
     }
 
+    fun updateAttendanceList(list: AttendanceList) {
+        databaseRepo.updateAttendanceList(list)
+    }
+
     fun deleteAttendanceList(list: AttendanceList) {
         databaseRepo.deleteAttendanceList(list)
     }
@@ -45,4 +49,6 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     fun createAppFolderIfMissing() {
         storageRepo.createAppFolder()
     }
+
+
 }
